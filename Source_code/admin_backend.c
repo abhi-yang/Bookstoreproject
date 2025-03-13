@@ -2,11 +2,16 @@
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <time.h>
 #include "books.h"
+// #include "sales.h"
 void sales();
 void addbook();
 void available_books();
+
+// struct areas
 struct books b;
+// struct sale s;
 
 void addbook()
 {
@@ -72,6 +77,7 @@ void addbook()
 
     printf("\nBook added successfully!\n");
 }
+
 void available_books()
 {
     char line, sent;
@@ -115,19 +121,3 @@ void available_books()
     }
 }
 
-void sales()
-{
-    FILE *fp;
-    fp = fopen("Sales_report.txt", "r");
-    if (fp == NULL)
-    {
-        printf("Error!!!!!\n");
-        exit(EXIT_FAILURE);
-    }
-    char line;
-    while (line = fgetc(fp) != EOF)
-    {
-        putchar(line);
-    }
-    fclose(fp);
-}
