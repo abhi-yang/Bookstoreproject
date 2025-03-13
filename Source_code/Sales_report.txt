@@ -1,32 +1,6 @@
-
-Monthly Sales Report:
+Sales Report:
 ----------------------
-Total sales for the current month: 0.00
-Cumulative sales: 0.00
-
-Monthly Sales Report:
+Monthly Sales Breakdown:
+Month 03: RS 16850.00
 ----------------------
-Total sales for the current month: 0.00
-Cumulative sales: 0.00
-
-Monthly Sales Report:
-----------------------
-Total sales for the current month: 0.00
-Cumulative sales: 0.00
-
-Monthly Sales Report:
-----------------------
-Total sales for the current month: RS 0.00
-Cumulative sales: RS 0.00
-----------------------
-
-Monthly Sales Report:
-----------------------
-Total sales for the current month: RS 0.00
-Cumulative sales: RS 0.00
-----------------------
-
-Monthly Sales Report:
-----------------------
-Total sales for the current month: 0.00
-Cumulative sales: 0.00
+Total Cumulative Sales: RS 16850.00

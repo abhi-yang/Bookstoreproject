@@ -11,7 +11,7 @@ void available_books();
 
 // struct areas
 struct books b;
-// struct sale s;
+// struct Sale s;
 
 void addbook()
 {
@@ -29,7 +29,7 @@ void addbook()
     fseek(fp, 0, SEEK_END);
     if (ftell(fp) == 0) // If file size is 0, write the header
     {
-        fprintf(fp, "%-5s | %-20s | %-20s | %-70s | %-10s\n", "No.", "Book Name", "Author", "Genre", "Price");
+        fprintf(fp, "%-5s | %-35s | %-25s | %-50s | %-10s\n", "No.", "Book Name", "Author", "Genre", "Price");
         fprintf(fp, "-------------------------------------------------------------\n");
     }
     else
@@ -66,7 +66,7 @@ void addbook()
         scanf("%d", &b.price);
 
         // Write book details with serial number
-        fprintf(fp, "%-5d | %-20s | %-20s | %-70s | RS %-10d\n", serialNumber, b.book, b.author, b.genre, b.price);
+        fprintf(fp, "%-5d | %-35s | %-25s | %-50s | RS %-10d\n", serialNumber, b.book, b.author, b.genre, b.price);
         printf("\nDo you wish to add more data[Y/N]   ");
         getchar();
         scanf("%c", &ans);
@@ -121,3 +121,78 @@ void available_books()
     }
 }
 
+void sales() {
+    FILE *fp;  // File pointer for Sales_report.txt
+    FILE *fc;  // File pointer for Cart.txt
+    char line[256];
+    double total_sales = 0.0;
+
+    // Open files
+    fp = fopen("Sales_report.txt", "w");  // Open in write mode to overwrite
+    fc = fopen("cart.txt", "r");
+    if (fp == NULL || fc == NULL) {
+        printf("Error opening file(s)!\n");
+        exit(EXIT_FAILURE);
+    }
+
+    printf("Calculating sales report...\n");
+
+    // Array to store monthly sales (12 months)
+    double monthly_sales[12] = {0};  // Initialize all months to 0
+
+    // Read each line from cart.txt
+    while (fgets(line, sizeof(line), fc)) {
+        int no;
+        char book_name[100], author[100], genre[100], price_str[20], purchase_date[30];
+        double price;
+
+        // Parse the line: Format is "No. | Book Name | Author | Genre | Price | Date of Purchase"
+        if (sscanf(line, "%d | %[^|] | %[^|] | %[^|] | %[^|] | Date of Purchase: %[^\n]", 
+                   &no, book_name, author, genre, price_str, purchase_date) == 6) {
+
+            // Extract the price, removing the "RS" prefix
+            sscanf(price_str, "RS %lf", &price);
+
+            // Extract the month from the purchase date (assume format "YYYY-MM-DD HH:MM:SS")
+            int year, month, day, hour, minute, second;
+            sscanf(purchase_date, "%d-%d-%d %d:%d:%d", &year, &month, &day, &hour, &minute, &second);
+
+            // Add the price to the corresponding month's sales
+            if (month >= 1 && month <= 12) {
+                monthly_sales[month - 1] += price;  // Months are 0-indexed in the array
+            }
+
+            // Add to total sales
+            total_sales += price;
+        }
+    }
+
+    // Write the updated sales report to Sales_report.txt
+    fprintf(fp, "Sales Report:\n");
+    fprintf(fp, "----------------------\n");
+    fprintf(fp, "Monthly Sales Breakdown:\n");
+
+    // Print sales for each month
+    for (int i = 0; i < 12; i++) {
+        if (monthly_sales[i] > 0) {  // Only print months with sales
+            fprintf(fp, "Month %02d: RS %.2f\n", i + 1, monthly_sales[i]);
+        }
+    }
+
+    fprintf(fp, "----------------------\n");
+    fprintf(fp, "Total Cumulative Sales: RS %.2f\n", total_sales);
+
+    // Print sales data to console
+    printf("Sales Report Updated Successfully!\n");
+    printf("Monthly Sales Breakdown:\n");
+    for (int i = 0; i < 12; i++) {
+        if (monthly_sales[i] > 0) {
+            printf("Month %02d: RS %.2f\n", i + 1, monthly_sales[i]);
+        }
+    }
+    printf("Total Cumulative Sales: RS %.2f\n", total_sales);
+
+    // Close files
+    fclose(fp);
+    fclose(fc);
+}

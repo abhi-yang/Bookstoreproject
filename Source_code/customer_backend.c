@@ -87,7 +87,7 @@ void searchby()
 
 void searchbybook()
 {
-    system("cls");
+    
     FILE *fp;
     int serialnumber;
     char book_name[200], line[200];
@@ -131,8 +131,8 @@ void searchbybook()
             if (!header)
             {
                 // Print the header once
-                printf("%-5s | %-20s | %-20s | %-70s | %-10s\n", "No.", "Book Name", "Author", "Genre", "Price");
-                printf("-------------------------------------------------------------\n");
+                printf("%-5s | %-35s | %-25s | %-50s | %-10s\n", "No.", "Book Name", "Author", "Genre", "Price");
+                printf("-------------------------------------------------------------------------------------------\n");
                 header = 1;
             }
             // Print the matched line
@@ -151,7 +151,7 @@ void searchbybook()
 
 void searchbyauthor()
 {
-    system("cls"); // Clear the console (only works in Windows)
+     // Clear the console (only works in Windows)
     FILE *fp;
     char author_name[200], line[200];
 
@@ -194,7 +194,7 @@ void searchbyauthor()
             if (!header)
             {
                 // Print the header once
-                printf("\n%-5s | %-20s | %-20s | %-30s | %-10s\n", "No.", "Book Name", "Author", "Genre", "Price");
+                printf("\n%-5s | %-35s | %-25s | %-50s | %-10s\n", "No.", "Book Name", "Author", "Genre", "Price");
                 printf("-------------------------------------------------------------------------------\n");
                 header = 1;
             }
@@ -259,7 +259,7 @@ void searchbygenre()
             if (!header)
             {
                 // Print the header once
-                printf("\n%-5s | %-20s | %-20s | %-30s | %-10s\n", "No.", "Book Name", "Author", "Genre", "Price");
+                printf("\n%-5s | %-35s | %-25s | %-50s | %-10s\n", "No.", "Book Name", "Author", "Genre", "Price");
                 printf("-------------------------------------------------------------------------------------------------------\n");
                 header = 1;
             }
@@ -276,7 +276,7 @@ void searchbygenre()
 
     fclose(fp); // Close the file after processing
 }
-
+//time issues
 void cart() {
     system("cls"); // Clear the console (only works in Windows)
     FILE *fp;
@@ -322,9 +322,9 @@ void cart() {
         if (strstr(line_upper, book_name_upper) != NULL) {
             if (!header) {
                 // Print the header for the cart
-                printf("%-5s | %-20s | %-20s | %-70s | %-10s | %-20s\n", 
-                       "No.", "Book Name", "Author", "Genre", "Price", "Date of Purchase");
-                printf("---------------------------------------------------------------------------------------------------\n");
+                printf("%-5s | %-25s | %-20s | %-45s | %-10s | %-20s\n", 
+                    "No.", "Book Name", "Author", "Genre", "Price", "Date of Purchase");
+             printf("-----------------------------------------------------------------------------------------------------------\n");
                 header = 1;
             }
 
@@ -335,11 +335,19 @@ void cart() {
             // Format the time as a string
             strftime(formatted_time, sizeof(formatted_time), "%Y-%m-%d %H:%M:%S", local_time);
 
-            // Write to the cart file
-            fprintf(fpcart, "%s | Date of Purchase: %s\n", line, formatted_time);
+            // Parse the line into individual columns
+            int no;
+            char book_name_col[26], author[21], genre[46], price[11];
+            sscanf(line, "%d | %25[^|] | %20[^|] | %45[^|] | %10[^\n]", 
+                &no, book_name_col, author, genre, price);
+
+            // Write to the cart file in the correct format
+            fprintf(fpcart, "%-5d | %-25s | %-20s | %-45s | %-10s | Date of Purchase: %s\n", 
+                no, book_name_col, author, genre, price, formatted_time);
 
             // Print the book details with the timestamp
-            printf("%s | %-20s\n", line, formatted_time);
+            printf("%-5d | %-25s | %-20s | %-45s | %-10s | Date of Purchase: %s\n", 
+                no, book_name_col, author, genre, price, formatted_time);
 
             match = 1;
         }
@@ -361,7 +369,6 @@ void cart() {
     fclose(fpcart);
     fclose(fp);
 }
-
  
 void sellbook()
 {
@@ -383,12 +390,12 @@ void sellbook()
 
     if (ftell(fp) == 0)
     { // If file size is 0, write the header
-        fprintf(fp, "%-5s | %-20s | %-20s | %-70s | %-10s\n", "No.", "Book Name", "Author", "Genre", "Price");
+        fprintf(fp, "%-5s | %-30s | %-25s | %-40s | %-10s\n", "No.", "Book Name", "Author", "Genre", "Price");
         fprintf(fp, "-------------------------------------------------------------\n");
     }
     if (ftell(fpp) == 0)
     {
-        fprintf(fpp, "%-5s | %-20s | %-20s | %-70s | %-10s\n", "No.", "Book Name", "Author", "Genre", "Price");
+        fprintf(fpp, "%-5s | %-30s | %-25s | %-40s | %-10s\n", "No.", "Book Name", "Author", "Genre", "Price");
         fprintf(fpp, "-------------------------------------------------------------\n");
     }
     else
@@ -431,12 +438,12 @@ void sellbook()
 
         printf("Enter book genre: ");
         scanf(" %[^\n]", b.genre);
-
+        //%-5s | %-30s | %-25s | %-40s | %-10s
         printf("Enter price: ");
         scanf("%d", &b.price);
 
-        fprintf(fp, "%-5d | %-20s | %-20s | %-70s | RS %-10d\n", serialNumber, b.book, b.author, b.genre, b.price);
-        fprintf(fpp, "%-5d | %-20s | %-20s | %-70s | RS %-10d\n", num, b.book, b.author, b.genre, b.price);
+        fprintf(fp, "%-5d | %-30s | %-25s | %-40s | RS %-10s\n", serialNumber, b.book, b.author, b.genre, b.price);
+        fprintf(fpp, "%-5d | %-30s | %-25s | %-40s | RS %-10s\n", num, b.book, b.author, b.genre, b.price);
 
         printf("\nDo you wish to add more data [Y/N]: ");
         getchar(); // To consume the newline left by the previous scanf
